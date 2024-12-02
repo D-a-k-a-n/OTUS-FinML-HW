@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # Ticker data
-data/raw/*
+data/*
 
 # Distribution / packaging
 .Python

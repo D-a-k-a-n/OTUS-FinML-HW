@@ -1,28 +1,23 @@
 from pathlib import Path
-
 import typer
-from loguru import logger
-from tqdm import tqdm
-
-from otus_hw1.config import FIGURES_DIR, PROCESSED_DATA_DIR
+from visualizer import run_dash_app
+from config import INTERIM_DATA_DIR
 
 app = typer.Typer()
 
 
 @app.command()
 def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    output_path: Path = FIGURES_DIR / "plot.png",
-    # -----------------------------------------
+    data_dir: Path = INTERIM_DATA_DIR,
+    top_5: bool = typer.Option(
+        True,
+        help="Set 5 ticks from SP500 (default is True)."
+    )
 ):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Generating plot from data...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Plot generation complete.")
-    # -----------------------------------------
+    """
+    Запуск веб-приложения для визуализации данных.
+    """
+    run_dash_app(data_dir=data_dir, top_5=top_5)
 
 
 if __name__ == "__main__":

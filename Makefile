@@ -64,8 +64,18 @@ create_environment:
 ## Make Dataset
 .PHONY: data
 data: requirements
-	pwd
 	$(PYTHON_INTERPRETER) otus_hw1/dataset.py
+
+
+## Make Plots App
+.PHONY: plots
+plots: requirements
+	$(PYTHON_INTERPRETER) otus_hw1/plots.py
+
+## Analyze data for quality and anomalies
+.PHONY: analyze
+analyze: requirements
+	$(PYTHON_INTERPRETER) otus_hw1/analyze.py
 
 
 #################################################################################
