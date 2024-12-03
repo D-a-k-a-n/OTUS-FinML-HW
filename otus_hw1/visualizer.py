@@ -1,8 +1,9 @@
-from dash import Dash, dcc, html, _dash_renderer
+from dash import Dash, dcc, _dash_renderer
 import dash_mantine_components as dmc
 from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
+
 _dash_renderer._set_react_version("18.2.0")
 
 
@@ -26,25 +27,25 @@ def create_ohlc_chart(data: pd.DataFrame, title: str):
     fig = go.Figure(
         data=[
             go.Candlestick(
-                x=data['timestamp'] if 'timestamp' in data.columns else data['Date'],
-                open=data['Open'],
-                high=data['High'],
-                low=data['Low'],
-                close=data['Close'],
-                name=title
+                x=data["timestamp"] if "timestamp" in data.columns else data["Date"],
+                open=data["Open"],
+                high=data["High"],
+                low=data["Low"],
+                close=data["Close"],
+                name=title,
             )
         ]
     )
     fig.update_layout(
-        title=title, 
-        xaxis_title='Date', 
-        yaxis_title='Price',
+        title=title,
+        xaxis_title="Date",
+        yaxis_title="Price",
         xaxis=dict(
             rangeslider=dict(visible=True),  # Включаем ползунок для удобства
             range=[data["Date"].iloc[-90], data["Date"].iloc[-1]],  # Начальный диапазон
         ),
     )
-    
+
     return fig
 
 
@@ -55,9 +56,7 @@ def generate_tabs(data: dict, tab_value: str):
     return dmc.Tabs(
         value="0",
         children=[
-            dmc.TabsList(
-                [dmc.TabsTab(ticker, value=str(idx)) for idx, ticker in enumerate(data)]
-            )
+            dmc.TabsList([dmc.TabsTab(ticker, value=str(idx)) for idx, ticker in enumerate(data)])
         ]
         + [
             dmc.TabsPanel(
@@ -76,9 +75,7 @@ def run_dash_app(data_dir: Path, top_5: bool):
     sp500_data, crypto_data = load_data(data_dir)
     # Extracting the 5 ticks from SP500
     if top_5:
-        ticks = [
-            "AAPL", "AMZN", "NFLX", "NVDA", "GOOGL"
-        ]
+        ticks = ["AAPL", "AMZN", "NFLX", "NVDA", "GOOGL"]
         sp500_data = {key: sp500_data[key] for key in ticks}
     # sp500_data = {key: value for i, (key, value) in enumerate(sp500_data.items()) if i < 5}
 

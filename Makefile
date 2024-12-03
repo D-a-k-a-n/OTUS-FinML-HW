@@ -26,20 +26,10 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-## Lint using flake8 and black (use `make format` to do formatting)
-.PHONY: lint
-lint:
-	flake8 otus_hw1
-	isort --check --diff --profile black otus_hw1
-	black --check --config pyproject.toml otus_hw1
-
 ## Format source code with black
 .PHONY: format
 format:
 	black --config pyproject.toml otus_hw1
-
-
-
 
 ## Set up python interpreter environment
 .PHONY: create_environment
@@ -64,18 +54,18 @@ create_environment:
 ## Make Dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) otus_hw1/dataset.py
+	$(PYTHON_INTERPRETER) otus_hw1/dataset.py $(ARGS)
 
 
 ## Make Plots App
 .PHONY: plots
 plots: requirements
-	$(PYTHON_INTERPRETER) otus_hw1/plots.py
+	$(PYTHON_INTERPRETER) otus_hw1/plots.py $(ARGS)
 
 ## Analyze data for quality and anomalies
 .PHONY: analyze
 analyze: requirements
-	$(PYTHON_INTERPRETER) otus_hw1/analyze.py
+	$(PYTHON_INTERPRETER) otus_hw1/analyze.py $(ARGS)
 
 
 #################################################################################

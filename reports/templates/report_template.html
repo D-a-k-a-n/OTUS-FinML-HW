@@ -4,25 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Quality Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <h1>Data Quality Report</h1>
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>File</th>
-                <th>Status</th>
                 <th>Missing Values</th>
-                <th>Outliers Count</th>
+                <th>Logic Errors</th>
+                <th>Interval Errors</th>
+                <th>Max Gap Day</th>
+                <th>Outlier IQR</th>
+                <th>Outlier LOF</th>
+                <th>Outlier IsolationForest</th>
             </tr>
         </thead>
         <tbody>
             {% for row in report %}
             <tr>
                 <td>{{ row.file }}</td>
-                <td>{{ row.status }}</td>
-                <td>{{ row.missing_values }}</td>
-                <td>{{ row.outliers_count }}</td>
+                <td>{{ "Yes" if row.missing_values else "No" }}</td>
+                <td>{{ "Yes" if row.logic_errors else "No" }}</td>
+                <td>{{ "Yes" if row.interval_errors else "No" }}</td>
+                <td>{{ row.max_gap_day }}</td>
+                <td>{{ row.Outlier_IQR }}</td>
+                <td>{{ row.Outlier_LOF }}</td>
+                <td>{{ row.Outlier_IsolationForest }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -9,53 +9,117 @@
 ## Project Organization
 
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         otus_hw1 and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── otus_hw1   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes otus_hw1 a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
+.
+├── LICENSE                  # Лицензия на проект (например, MIT, Apache 2.0)
+├── Makefile                 # Makefile для автоматизации задач (например, make data, make analyze)
+├── README.md                # Основной README файл проекта с описанием функциональности
+├── data                     # Папка для хранения данных
+│   ├── external             # Данные из внешних источников
+│   ├── interim              # Промежуточные данные, подготовленные для анализа
+│   ├── processed            # Обработанные данные, готовые для моделирования
+│   └── raw                  # Исходные данные в необработанном виде
+├── docs                     # Документация проекта
+│   ├── README.md            # Общее описание документации
+│   ├── docs
+│   │   ├── getting-started.md # Руководство по началу работы с проектом
+│   │   └── index.md         # Основной файл документации (например, для MkDocs)
+│   └── mkdocs.yml           # Конфигурация для генерации документации с помощью MkDocs
+├── models                   # Папка для хранения обученных моделей и их артефактов
+├── notebooks                # Jupyter-ноутбуки для анализа и исследования данных
+│   └── analyze.ipynb        # Ноутбук с анализом данных
+├── otus_hw1                 # Исходный код проекта
+│   ├── __init__.py          # Файл, делающий папку Python-модулем
+│   ├── analyze.py           # Скрипт для анализа данных (поиск пропусков, ошибок, аномалий)
+│   ├── config.py            # Конфигурация проекта (пути, параметры, ключи API)
+│   ├── dataset.py           # Скрипт для загрузки и подготовки данных
+│   ├── features.py          # Скрипт для генерации признаков (feature engineering)
+│   ├── modeling             # Папка с кодом для обучения и использования моделей
+│   │   ├── __init__.py      # Файл для инициализации модуля моделирования
+│   │   ├── predict.py       # Скрипт для прогнозирования с использованием обученных моделей
+│   │   └── train.py         # Скрипт для обучения моделей
+│   ├── plots.py             # Скрипт для создания визуализаций
+│   └── visualizer.py        # Скрипт для построения интерактивных графиков (например, с использованием Plotly)
+├── pyproject.toml           # Конфигурация проекта (пакеты, форматы кода и другие настройки)
+├── references               # Справочные материалы, документация и описания данных
+├── reports                  # Отчеты и результаты анализа
+│   ├── figures              # Генерируемые графики и диаграммы для отчетов
+│   └── templates            # Шаблоны для отчетов
+│       └── report_template.html # HTML-шаблон для создания отчетов
+├── requirements.txt         # Список зависимостей Python для установки проекта
+└── setup.cfg                # Конфигурация инструментов (например, flake8, pytest)
 ```
 
 --------
+
+## Зависимости
+
+Для установки всех необходимых зависимостей выполните:
+```bash
+make requirements
+```
+Убедитесь, что у вас установлен Python версии `3.10.15`.
+
+---
+
+## Доступные команды
+Для просмотра списка всех доступных команд выполните:
+```bash
+make
+```
+
+---
+
+## Загрузка данных
+Загрузка данных о котировках (5 акций S&P 500 и криптовалюты):
+```bash
+make data
+```
+Загрузка данных для всех акций из списка S&P 500 и криптовалют:
+```bash
+make data ARGS="--no-top-5"
+```
+
+---
+
+## Построение графиков
+Создание динамичного веб-сайта с графиками японских свечей (5 акций S&P 500 и криптовалюты):
+```bash
+make plots
+```
+Создание графиков для всех акций из списка S&P 500 и криптовалют:
+```bash
+make plots ARGS="--no-top-5"
+```
+
+---
+
+## Анализ данных
+Анализ данных на пропуски, ошибки и аномалии (5 акций S&P 500 и криптовалюты):
+```bash
+make analyze
+```
+Анализ данных для всех акций из списка S&P 500 и криптовалют:
+```bash
+make analyze ARGS="--no-top-5"
+```
+
+---
+
+## Ключевые особенности
+1. Анализ данных:
+    - Проверка данных на наличие пропусков и логических ошибок.
+    - Анализ выбросов с использованием методов IQR, LOF, Isolation Forest.
+    - Создание визуальных графиков с выделением аномалий.
+2. Динамические графики:
+    - Построение интерактивных графиков японских свечей с помощью библиотеки Plotly.
+    - Поддержка как ограниченного списка акций, так и полного списка S&P 500.
+3. Makefile для автоматизации:
+    - Удобная автоматизация задач через команды `make`.
+
+---
+
+## Примечания по анализу данных
+По результатам анализа данных: выбросы и аномалии, обнаруженные в данных, являются реальными данными, с которыми необходимо работать, а не ошибками.
+
+---
 

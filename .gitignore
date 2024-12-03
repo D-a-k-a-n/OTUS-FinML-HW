@@ -8,6 +8,7 @@ __pycache__/
 
 # Ticker data
 data/*
+reports/figures/*
 
 # Distribution / packaging
 .Python

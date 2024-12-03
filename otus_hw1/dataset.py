@@ -1,5 +1,4 @@
 from pathlib import Path
-import os
 import pandas as pd
 import yfinance as yf
 import ccxt
@@ -10,6 +9,7 @@ from tqdm import tqdm  # type: ignore
 from config import INTERIM_DATA_DIR, RAW_DATA_DIR
 
 app = typer.Typer()
+
 
 # Очистка данных S&P 500
 def clean_sp500_data(df: pd.DataFrame) -> pd.DataFrame:
@@ -26,14 +26,16 @@ def clean_sp500_data(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = df.columns.get_level_values(0)  # Retain only the 'Price' level
 
     # Шаг 2: Сброс индекса для преобразования 'Date' из индекса в столбец
-    df = df.reset_index().rename(columns={'index': 'Date'})
-    
+    df = df.reset_index().rename(columns={"index": "Date"})
+
     # Шаг 3: Преобразовать типы данных в правильные форматы
     try:
         df["Date"] = pd.to_datetime(df["Date"])  # Конвертируем столбец Date в формат datetime
         df[["Adj Close", "Close", "High", "Low", "Open"]] = df[
             ["Adj Close", "Close", "High", "Low", "Open"]
-        ].astype(float)  # Конвертируем числовые столбцы в тип float
+        ].astype(
+            float
+        )  # Конвертируем числовые столбцы в тип float
         df["Volume"] = df["Volume"].astype(int)  # Конвертируем столбец Volume в тип int
     except KeyError as e:
         raise ValueError(f"Отсутствуют необходимые столбцы: {e}")
@@ -59,14 +61,17 @@ def save_as_parquet(df: pd.DataFrame, output_path: Path):
 
 
 # Функции загрузки данных
-def download_sp500_data(output_dir: Path, processed_dir: Path):
+def download_sp500_data(output_dir: Path, processed_dir: Path, top_5: bool):
     """
-    Загрузка данных по компаниям из S&P 500, сохранение в output_dir (CSV) 
+    Загрузка данных по компаниям из S&P 500, сохранение в output_dir (CSV)
     и processed_dir (Parquet).
     """
     logger.info("Загрузка данных S&P 500...")
-    sp500_tickers_url = "https://datahub.io/core/s-and-p-500-companies/r/constituents.csv"
-    sp500_tickers = pd.read_csv(sp500_tickers_url)['Symbol'].tolist()
+    if top_5:
+        sp500_tickers = ["AAPL", "AMZN", "NFLX", "NVDA", "GOOGL"]
+    else:
+        sp500_tickers_url = "https://datahub.io/core/s-and-p-500-companies/r/constituents.csv"
+        sp500_tickers = pd.read_csv(sp500_tickers_url)["Symbol"].tolist()
 
     for ticker in tqdm(sp500_tickers, desc="Загрузка S&P 500"):
         try:
@@ -84,18 +89,18 @@ def download_sp500_data(output_dir: Path, processed_dir: Path):
 
 def download_crypto_data(output_dir: Path, processed_dir: Path):
     """
-    Загрузка данных по криптовалютам, сохранение в output_dir (CSV) 
+    Загрузка данных по криптовалютам, сохранение в output_dir (CSV)
     и processed_dir (Parquet).
     """
     logger.info("Загрузка данных по криптовалютам...")
-    cryptos = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT']
+    cryptos = ["BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT"]
     exchange = ccxt.binance()
 
     for crypto in tqdm(cryptos, desc="Загрузка криптовалют"):
         try:
-            ohlcv = exchange.fetch_ohlcv(crypto, timeframe='1d', limit=365)
-            df = pd.DataFrame(ohlcv, columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volume'])
-            df['Date'] = pd.to_datetime(df['Date'], unit='ms')
+            ohlcv = exchange.fetch_ohlcv(crypto, timeframe="1d", limit=365)
+            df = pd.DataFrame(ohlcv, columns=["Date", "Open", "High", "Low", "Close", "Volume"])
+            df["Date"] = pd.to_datetime(df["Date"], unit="ms")
             # Сохранение в CSV
             df.to_csv(output_dir / f"{crypto.replace('/', '_')}.csv", index=False)
             # Сохранение в Parquet
@@ -113,6 +118,7 @@ def main(
     crypto_output_dir: Path = RAW_DATA_DIR / "crypto_data",
     sp500_interim_dir: Path = INTERIM_DATA_DIR / "sp500_data",
     crypto_interim_dir: Path = INTERIM_DATA_DIR / "crypto_data",
+    top_5: bool = typer.Option(True, help="Обработать только топ-5 тикеров S&P 500."),
 ):
     """
     Главная функция для загрузки данных по S&P 500 и криптовалютам.
@@ -124,10 +130,11 @@ def main(
     crypto_interim_dir.mkdir(parents=True, exist_ok=True)
 
     # Загрузка данных
-    download_sp500_data(sp500_output_dir, sp500_interim_dir)
+    download_sp500_data(sp500_output_dir, sp500_interim_dir, top_5)
     download_crypto_data(crypto_output_dir, crypto_interim_dir)
 
     logger.success("Все данные успешно загружены и сохранены.")
+
 
 if __name__ == "__main__":
     app()

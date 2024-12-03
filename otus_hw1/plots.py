@@ -9,10 +9,7 @@ app = typer.Typer()
 @app.command()
 def main(
     data_dir: Path = INTERIM_DATA_DIR,
-    top_5: bool = typer.Option(
-        True,
-        help="Set 5 ticks from SP500 (default is True)."
-    )
+    top_5: bool = typer.Option(True, help="Set 5 ticks from SP500 (default is True)."),
 ):
     """
     Запуск веб-приложения для визуализации данных.
