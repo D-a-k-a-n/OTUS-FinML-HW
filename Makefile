@@ -31,18 +31,17 @@ clean:
 format:
 	black --config pyproject.toml otus_hw1
 
-## Set up python interpreter environment
+## Set up Python interpreter environment
 .PHONY: create_environment
 create_environment:
-	@bash -c "if pyenv versions | grep -q $(PROJECT_NAME); then \
+	@bash -c "if pyenv virtualenvs | grep -q '$(PROJECT_NAME)'; then \
 		echo '>>> Environment $(PROJECT_NAME) already exists. Activating it...'; \
 	else \
-		pyenv virtualenv $(PYTHON_INTERPRETER) $(PROJECT_NAME); \
+		pyenv virtualenv $(PYTHON_VERSION) $(PROJECT_NAME); \
 		echo '>>> New pyenv virtualenv $(PROJECT_NAME) created.'; \
 	fi"
-	@echo ">>> Activate the environment with:\npyenv activate $(PROJECT_NAME)"
+	@echo ">>> Activate the environment with: pyenv activate $(PROJECT_NAME)"
 
-	
 
 
 
