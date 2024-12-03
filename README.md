@@ -123,3 +123,8 @@ make analyze ARGS="--no-top-5"
 
 ---
 
+## Пример запуска проекта
+
+[![Видео: Как запустить проект](https://img.youtube.com/vi/RrusgFzwkAw/0.jpg)](https://www.youtube.com/watch?v=RrusgFzwkAw)
+
+---
