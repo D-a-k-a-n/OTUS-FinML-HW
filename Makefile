@@ -2,7 +2,7 @@
 # GLOBALS                                                                       #
 #################################################################################
 
-PROJECT_NAME = OTUS-HW1
+PROJECT_NAME = otus_finml_hw
 PYTHON_VERSION = 3.10.15
 PYTHON_INTERPRETER = python
 
@@ -29,7 +29,7 @@ clean:
 ## Format source code with black
 .PHONY: format
 format:
-	black --config pyproject.toml otus_hw1
+	python -m black --config pyproject.toml src
 
 ## Set up Python interpreter environment
 .PHONY: create_environment
@@ -53,18 +53,18 @@ create_environment:
 ## Make Dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) otus_hw1/dataset.py $(ARGS)
+	$(PYTHON_INTERPRETER) src/dataset.py $(ARGS)
 
 
 ## Make Plots App
 .PHONY: plots
 plots: requirements
-	$(PYTHON_INTERPRETER) otus_hw1/plots.py $(ARGS)
+	$(PYTHON_INTERPRETER) src/plots.py $(ARGS)
 
 ## Analyze data for quality and anomalies
 .PHONY: analyze
 analyze: requirements
-	$(PYTHON_INTERPRETER) otus_hw1/analyze.py $(ARGS)
+	$(PYTHON_INTERPRETER) src/analyze.py $(ARGS)
 
 
 #################################################################################
